@@ -55,5 +55,16 @@ namespace testing.Properties {
                 return ((string)(this["testv5ConnectionString1"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-SLBI6LR\\MSSQLSERVER2024;Initial Catalog=FinalDb;Integrated Se" +
+            "curity=True;TrustServerCertificate=True")]
+        public string FinalDbConnectionString {
+            get {
+                return ((string)(this["FinalDbConnectionString"]));
+            }
+        }
     }
 }

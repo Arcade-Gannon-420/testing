@@ -24,13 +24,18 @@ namespace testing.Registration_System.Student_Account_System
 {
     public partial class studentAccountSystem : UserControl
     {
-        SqlConnection connectionString = new SqlConnection(@"Data Source = DESKTOP-SLBI6LR\SQLEXPRESS;Initial Catalog = FinalDb;Integrated Security=True");
+
+        SqlConnection connectionString = new SqlConnection(@"Data Source = DESKTOP-SLBI6LR\MSSQLSERVER2024;Initial Catalog = FinalDb;Integrated Security=True");
 
         public studentAccountSystem()
         {
             InitializeComponent();
-            displayStudentData();
             txtIDNumber.TextChanged += txtIDNumber_TextChanged;
+        }
+
+        private void studentAccountSystem_Load(object sender, EventArgs e)
+        {
+            displayStudentData();
         }
         public void RefreshData()
         {
@@ -39,7 +44,6 @@ namespace testing.Registration_System.Student_Account_System
                 dataGridView1.Invoke((MethodInvoker)delegate { RefreshData(); });
                 return;
             }
-
             displayStudentData();
         }
         public void displayStudentData()
@@ -90,6 +94,26 @@ namespace testing.Registration_System.Student_Account_System
             return null;
         }
 
+        private void btnBrowseImg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Filter = "Image Files (*.jpg; *.png)|*.jpg;*.png";
+                string imagePath = "";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    imagePath = dialog.FileName;
+                    AddStudentPicture.ImageLocation = imagePath;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex
+                    , "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void btnRegister_Click(object sender, EventArgs e)
         {
             if (txtIDNumber.Text == ""
@@ -110,10 +134,10 @@ namespace testing.Registration_System.Student_Account_System
             {
                 if (connectionString.State == ConnectionState.Closed)
                 {
+
                     try
                     {
                         connectionString.Open();
-
                         // Check for duplicate student ID before registration
                         string checkStudentID = "SELECT COUNT(*) FROM StudentsAccounts WHERE IDNumber = @IDNumber";
                         using (SqlCommand checkCmd = new SqlCommand(checkStudentID, connectionString))
@@ -157,20 +181,24 @@ namespace testing.Registration_System.Student_Account_System
                             cmd.Parameters.AddWithValue("@SchoolYear", cmbSY.Text.Trim());
                             cmd.Parameters.AddWithValue("@Semester", cmbSemester.Text.Trim());
 
-                            // Image handling logic
                             if (AddStudentPicture.Image != null)
                             {
-                                string imagePath = Path.Combine( // Replace with your desired image directory path
-                                    @"C:\Thesis Finale\Backup\Data\images", // Example path, modify accordingly
-                                    txtIDNumber.Text.Trim() + ".jpg");
+                                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                string parentFolderName = "Student Information"; // Name of the parent folder
+                                string childFolderName = "Student Image"; // Name of the child folder
+                                string parentFolderPath = Path.Combine(documentsPath, parentFolderName);
+                                string childFolderPath = Path.Combine(parentFolderPath, childFolderName);
+                                string imagePath = Path.Combine(childFolderPath, txtIDNumber.Text.Trim() + ".jpg");
 
-                                string directoryPath = Path.GetDirectoryName(imagePath);
+                                // Create the parent folder if it doesn't exist
+                                if (!Directory.Exists(parentFolderPath))
+                                    Directory.CreateDirectory(parentFolderPath);
 
-                                if (!Directory.Exists(directoryPath))
-                                {
-                                    Directory.CreateDirectory(directoryPath);
-                                }
+                                // Create the child folder if it doesn't exist
+                                if (!Directory.Exists(childFolderPath))
+                                    Directory.CreateDirectory(childFolderPath);
 
+                                // Copy the image to the child folder
                                 File.Copy(AddStudentPicture.ImageLocation, imagePath, true);
 
                                 // Assuming the image column in your table is a varbinary(max) type
@@ -178,43 +206,44 @@ namespace testing.Registration_System.Student_Account_System
                             }
                             else
                             {
-                                // Handle case where no image is selected (optional: set a default image path)
-                                cmd.Parameters.AddWithValue("@Photo", DBNull.Value); // Set to null if no image
+                                // Set photo to null if no image selected
+                                cmd.Parameters.AddWithValue("@Photo", DBNull.Value);
                             }
-
-                            cmd.ExecuteNonQuery();
-                            RefreshData();
-
 
                             if (addQRCode.Image != null)
                             {
-                                // Get the IDNumber from the user interface
+                                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                string parentFolderName = "Student Information"; // Name of the parent folder
+                                string childFolderName = "Student QR Code"; // Name of the child folder
+                                string parentFolderPath = Path.Combine(documentsPath, parentFolderName);
+                                string childFolderPath = Path.Combine(parentFolderPath, childFolderName);
+
+                                // Create the parent folder if it doesn't exist
+                                if (!Directory.Exists(parentFolderPath))
+                                    Directory.CreateDirectory(parentFolderPath);
+
+                                // Create the child folder if it doesn't exist
+                                if (!Directory.Exists(childFolderPath))
+                                    Directory.CreateDirectory(childFolderPath);
+
                                 int IDNumber = int.Parse(txtIDNumber.Text.Trim());
+                                string qrCodeImagePath = Path.Combine(childFolderPath, IDNumber.ToString() + ".png");
 
-                                // Prompt user to choose where to save the file
-                                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                                saveFileDialog.Filter = "PNG Image|*.png";
-                                saveFileDialog.Title = "Save QR Code Image";
-                                saveFileDialog.FileName = IDNumber.ToString(); // Set default filename
+                                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                                QRCodeData qrCodeData = qrGenerator.CreateQrCode(txtIDNumber.Text.Trim(), QRCodeGenerator.ECCLevel.Q);
+                                QRCode qrCode = new QRCode(qrCodeData);
+                                Bitmap qrCodeImage = qrCode.GetGraphic(20); // Adjust the size here (e.g., 20)
+                                qrCodeImage.Save(qrCodeImagePath, ImageFormat.Png);
 
-                                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                                {
-                                    // Convert the QR code image to a byte array
-                                    byte[] qrCodeBytes;
-                                    using (MemoryStream stream = new MemoryStream())
-                                    {
-                                        addQRCode.Image.Save(stream, ImageFormat.Png);
-                                        qrCodeBytes = stream.ToArray();
-                                    }
-
-                                    // Save the QR code image to the selected file
-                                    addQRCode.Image.Save(saveFileDialog.FileName, ImageFormat.Png);
-                                }
+                                MessageBox.Show("QR Code image saved successfully!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
                             else
                             {
                                 MessageBox.Show("No QR Code image to save.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
+
+                            cmd.ExecuteNonQuery();
+                            RefreshData();
 
                             MessageBox.Show("Student registered successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             clearFields();
@@ -234,26 +263,6 @@ namespace testing.Registration_System.Student_Account_System
             }
         }
 
-        private void btnBrowseImg_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                OpenFileDialog dialog = new OpenFileDialog();
-                dialog.Filter = "Image Files (*.jpg; *.png)|*.jpg;*.png";
-                string imagePath = "";
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    imagePath = dialog.FileName;
-                    AddStudentPicture.ImageLocation = imagePath;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex, "Error Message"
-                    , MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         public void clearFields()
         {
             txtIDsearch.Clear();
@@ -267,7 +276,7 @@ namespace testing.Registration_System.Student_Account_System
             cmbSY.SelectedItem = null;
             cmbSemester.SelectedItem = null;
             AddStudentPicture.Image = null;
-        }      
+        }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
@@ -282,10 +291,9 @@ namespace testing.Registration_System.Student_Account_System
             {
                 MessageBox.Show("Please fill all blank fields except ID number", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
             else
-            {
-                if (connectionString.State == ConnectionState.Closed)
-                {
+            {               
                     try
                     {
                         connectionString.Open();
@@ -301,7 +309,7 @@ namespace testing.Registration_System.Student_Account_System
                                 MessageBox.Show("ID number does not exist in the database. Please register the student first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return; // Exit the method
                             }
-                              
+
                             if (count > 1)
                             {
                                 MessageBox.Show(" ID Number cannot be modified!", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -341,44 +349,25 @@ namespace testing.Registration_System.Student_Account_System
 
                             if (!string.IsNullOrEmpty(AddStudentPicture.ImageLocation))
                             {
-                                string imagePath = Path.Combine( // Replace with your desired image directory path
-                                    @"C:\Thesis Finale\Backup\Data\images",
-                                    txtIDNumber.Text.Trim() + ".jpg"); // Use ID number for filename
+                                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                string parentFolderName = "Student Information";
+                                string childFolderName = "Student Image";
+                                string parentFolderPath = Path.Combine(documentsPath, parentFolderName);
+                                string childFolderPath = Path.Combine(parentFolderPath, childFolderName);
+                                string imagePath = Path.Combine(childFolderPath, txtIDNumber.Text.Trim() + ".jpg");
 
-                                string directoryPath = Path.GetDirectoryName(imagePath);
+                                if (!Directory.Exists(parentFolderPath))
+                                    Directory.CreateDirectory(parentFolderPath);
 
-                                if (!Directory.Exists(directoryPath))
-                                {
-                                    Directory.CreateDirectory(directoryPath);
-                                }
+                                if (!Directory.Exists(childFolderPath))
+                                    Directory.CreateDirectory(childFolderPath);
 
-                                // Check if a file with the same name exists
-                                bool fileExists = File.Exists(imagePath);
-
-                                if (fileExists)
-                                {
-                                    // Prompt the user if they want to overwrite the existing photo
-                                    DialogResult result = MessageBox.Show("Do you want to overwrite the existing photo?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                                    if (result == DialogResult.No)
-                                    {
-                                        // If the user chooses not to overwrite, exit the method
-                                        return;
-                                    }
-                                }
-
-                                // Copy the new photo to the image directory, overwriting if it already exists
                                 File.Copy(AddStudentPicture.ImageLocation, imagePath, true);
-
-                                // Read the image file and add it to the parameters
                                 cmd.Parameters.AddWithValue("@Photo", File.ReadAllBytes(imagePath));
                             }
                             else
                             {
-                                // Get the existing photo from the database
                                 byte[] existingPhoto = GetStudentPhoto(int.Parse(txtIDNumber.Text.Trim()));
-
-                                // If there's an existing photo, use it; otherwise, show an error message
                                 if (existingPhoto != null)
                                 {
                                     cmd.Parameters.AddWithValue("@Photo", existingPhoto);
@@ -386,7 +375,7 @@ namespace testing.Registration_System.Student_Account_System
                                 else
                                 {
                                     MessageBox.Show("No existing photo found. Please add a photo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return; // Exit the method to avoid further processing without a photo
+                                    return;
                                 }
                             }
 
@@ -404,8 +393,7 @@ namespace testing.Registration_System.Student_Account_System
                     finally
                     {
                         connectionString.Close();
-                    }
-                }
+                    }                
             }
         }
 
@@ -438,23 +426,37 @@ namespace testing.Registration_System.Student_Account_System
                     }
 
                     // Delete the associated photo file from the file system
-                    string imagePath = Path.Combine(@"C:\Thesis Finale\Backup\Data\images", txtIDNumber.Text.Trim() + ".jpg");
-                    string qrimagePath = Path.Combine(@"C:\Thesis Finale\Backup\Data\qr code", txtIDNumber.Text.Trim() + ".png");
-                    if (File.Exists(imagePath)||File.Exists(qrimagePath))
+                    string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    string parentFolderName = "Student Information";
+                    string childImageFolderName = "Student Image";
+                    string childQRCodeFolderName = "Student QR Code";
+                    string parentFolderPath = Path.Combine(documentsPath, parentFolderName);
+                    string childImageFolderPath = Path.Combine(parentFolderPath, childImageFolderName);
+                    string childQRCodeFolderPath = Path.Combine(parentFolderPath, childQRCodeFolderName);
+                    string imageFilePath = Path.Combine(childImageFolderPath, txtIDNumber.Text.Trim() + ".jpg");
+                    string qrCodeFilePath = Path.Combine(childQRCodeFolderPath, txtIDNumber.Text.Trim() + ".png");
+
+                    // Check if image file exists before deletion
+                    if (File.Exists(imageFilePath))
                     {
-                        File.Delete(imagePath);
-                        File.Delete(qrimagePath);
+                        File.Delete(imageFilePath);
+                    }
+                    // Check if QR code file exists before deletion
+                    if (File.Exists(qrCodeFilePath))
+                    {
+                        File.Delete(qrCodeFilePath);
                     }
 
                     MessageBox.Show("Student deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     clearFields();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error: Unable to delete. You must disenroll the student first! " , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
+
         private void btnClear_Click(object sender, EventArgs e)
         {
             clearFields();
@@ -580,15 +582,18 @@ namespace testing.Registration_System.Student_Account_System
         {
             try
             {
-                // Clear any existing data in the DataGridView
+                // Check if the connection is already open; if so, close it
+                if (connectionString.State != ConnectionState.Closed)
+                {
+                    connectionString.Close();
+                }
 
-
+                connectionString.Open();
 
                 if (txtIDsearch.Text.Trim() == "") // Check if search field is empty
                 {
-                    string defaultQuery = "SELECT * FROM StudentsAccounts";  // Replace with your default student selection logic
+                    string defaultQuery = "SELECT * FROM StudentsAccounts"; // Replace with your default student selection logic
 
-                    connectionString.Open();
                     using (SqlCommand cmd = new SqlCommand(defaultQuery, connectionString))
                     {
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
@@ -600,7 +605,6 @@ namespace testing.Registration_System.Student_Account_System
                     }
                     return;
                 }
-
 
                 string sql = "SearchStudent";
                 using (SqlCommand cmd = new SqlCommand(sql, connectionString))
@@ -644,10 +648,13 @@ namespace testing.Registration_System.Student_Account_System
             }
             finally
             {
-                connectionString.Close();
+                // Always ensure the connection is closed in the finally block
+                if (connectionString.State != ConnectionState.Closed)
+                {
+                    connectionString.Close();
+                }
             }
         }
 
-       
     }
 }

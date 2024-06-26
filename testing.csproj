@@ -12,7 +12,8 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <PublishUrl>publish\</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\bgmia\OneDrive\Desktop\Published Data\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,10 +23,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -47,8 +48,58 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>5CDC20890AE2D670E18E0CF7D1234B2009A1EB47</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>testing_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>chart_finance_economy_project_management_business_icon_263048.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
+      <HintPath>packages\ControlzEx.4.4.0\lib\net462\ControlzEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Guna.UI2, Version=2.0.4.6, Culture=neutral, PublicKeyToken=8b9d14aa5142e261, processorArchitecture=MSIL">
+      <HintPath>packages\Guna.UI2.WinForms.2.0.4.6\lib\net48\Guna.UI2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="QRCoder, Version=1.4.3.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
@@ -57,10 +108,19 @@
     <Reference Include="ReaLTaiizor, Version=3.8.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\ReaLTaiizor.3.8.0.5\lib\net48\ReaLTaiizor.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,23 +133,111 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attendance Override System\attendanceOverrideSystem.cs">
+    <Compile Include="Attendance Login Form\InstructorLogin.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Attendance Override System\attendanceOverrideSystem.Designer.cs">
-      <DependentUpon>attendanceOverrideSystem.cs</DependentUpon>
+    <Compile Include="Attendance Login Form\InstructorLogin.Designer.cs">
+      <DependentUpon>InstructorLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="Attendance Override System\Override Buttons\overrideSender.cs">
+    <Compile Include="Attendance Login Form\laboratorySupervisorLogin.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Attendance Override System\Override Buttons\overrideSender.Designer.cs">
-      <DependentUpon>overrideSender.cs</DependentUpon>
+    <Compile Include="Attendance Login Form\laboratorySupervisorLogin.Designer.cs">
+      <DependentUpon>laboratorySupervisorLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Attendance Login Form\a.loginMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Attendance Login Form\a.loginMenu.Designer.cs">
+      <DependentUpon>a.loginMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Attendance Login Form\WorkingStudentLogin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Attendance Login Form\WorkingStudentLogin.Designer.cs">
+      <DependentUpon>WorkingStudentLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="attendanceData.cs" />
+    <Compile Include="Dashboard Privilege\Dashboard Privilege Display\InstructorDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dashboard Privilege\Dashboard Privilege Display\InstructorDisplay.Designer.cs">
+      <DependentUpon>InstructorDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard Privilege\Dashboard Privilege Display\LabSupervisorDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dashboard Privilege\Dashboard Privilege Display\LabSupervisorDisplay.Designer.cs">
+      <DependentUpon>LabSupervisorDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard Privilege\Dashboard Privilege Display\WorkingStudentDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dashboard Privilege\Dashboard Privilege Display\WorkingStudentDisplay.Designer.cs">
+      <DependentUpon>WorkingStudentDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard Privilege\InstructorDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dashboard Privilege\InstructorDashboard.Designer.cs">
+      <DependentUpon>InstructorDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard Privilege\LabSupervisorDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dashboard Privilege\LabSupervisorDashboard.Designer.cs">
+      <DependentUpon>LabSupervisorDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard Privilege\WorkingStudentDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dashboard Privilege\WorkingStudentDashboard.Designer.cs">
+      <DependentUpon>WorkingStudentDashboard.cs</DependentUpon>
     </Compile>
     <Compile Include="dashboard.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="dashboard.Designer.cs">
       <DependentUpon>dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FinalDbDataSet.cs">
+      <DependentUpon>FinalDbDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="FinalDbDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FinalDbDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="OverrideAttendances.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OverrideAttendances.Designer.cs">
+      <DependentUpon>OverrideAttendances.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="Subject System\subjectInstructorAssignment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Subject System\subjectInstructorAssignment.Designer.cs">
+      <DependentUpon>subjectInstructorAssignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\AuditSystem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Utilities\AuditSystem.Designer.cs">
+      <DependentUpon>AuditSystem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Subject List\InstructorClassList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Subject List\InstructorClassList.Designer.cs">
+      <DependentUpon>InstructorClassList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\studentAttendanceSummary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Utilities\studentAttendanceSummary.Designer.cs">
+      <DependentUpon>studentAttendanceSummary.cs</DependentUpon>
     </Compile>
     <Compile Include="Subject System\subjectEnrollmentSystem.cs">
       <SubType>UserControl</SubType>
@@ -125,24 +273,45 @@
     <Compile Include="Subject System\subjectCreationSystem.Designer.cs">
       <DependentUpon>subjectCreationSystem.cs</DependentUpon>
     </Compile>
-    <Compile Include="testDashboard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="testDashboard.Designer.cs">
-      <DependentUpon>testDashboard.cs</DependentUpon>
-    </Compile>
     <Compile Include="usersData.cs" />
-    <EmbeddedResource Include="Attendance Override System\attendanceOverrideSystem.resx">
-      <DependentUpon>attendanceOverrideSystem.cs</DependentUpon>
+    <EmbeddedResource Include="Attendance Login Form\a.loginMenu.resx">
+      <DependentUpon>a.loginMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Attendance Override System\Override Buttons\overrideSender.resx">
-      <DependentUpon>overrideSender.cs</DependentUpon>
+    <EmbeddedResource Include="Attendance Login Form\InstructorLogin.resx">
+      <DependentUpon>InstructorLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Attendance Login Form\laboratorySupervisorLogin.resx">
+      <DependentUpon>laboratorySupervisorLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Attendance Login Form\WorkingStudentLogin.resx">
+      <DependentUpon>WorkingStudentLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard Privilege\Dashboard Privilege Display\InstructorDisplay.resx">
+      <DependentUpon>InstructorDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard Privilege\Dashboard Privilege Display\LabSupervisorDisplay.resx">
+      <DependentUpon>LabSupervisorDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard Privilege\Dashboard Privilege Display\WorkingStudentDisplay.resx">
+      <DependentUpon>WorkingStudentDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard Privilege\InstructorDashboard.resx">
+      <DependentUpon>InstructorDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard Privilege\WorkingStudentDashboard.resx">
+      <DependentUpon>WorkingStudentDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="dashboard.resx">
       <DependentUpon>dashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard Privilege\LabSupervisorDashboard.resx">
+      <DependentUpon>LabSupervisorDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OverrideAttendances.resx">
+      <DependentUpon>OverrideAttendances.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Registration System\Student Account System\studentAccountSystem.resx">
       <DependentUpon>studentAccountSystem.cs</DependentUpon>
@@ -155,19 +324,42 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Registration System\User Account System\userAccountSystem.resx">
       <DependentUpon>userAccountSystem.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Subject System\subjectInstructorAssignment.resx">
+      <DependentUpon>subjectInstructorAssignment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utilities\AttendanceSummaryReport.rdlc" />
+    <EmbeddedResource Include="Subject List\InstructorClassList.resx">
+      <DependentUpon>InstructorClassList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utilities\SubjectEnrollmentReport.rdlc" />
     <EmbeddedResource Include="Subject System\subjectCreationSystem.resx">
       <DependentUpon>subjectCreationSystem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Subject System\subjectEnrollmentSystem.resx">
       <DependentUpon>subjectEnrollmentSystem.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="testDashboard.resx">
-      <DependentUpon>testDashboard.cs</DependentUpon>
+    <EmbeddedResource Include="Utilities\AuditSystem.resx">
+      <DependentUpon>AuditSystem.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Utilities\studentAttendanceSummary.resx">
+      <DependentUpon>studentAttendanceSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="FinalDbDataSet.xsc">
+      <DependentUpon>FinalDbDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="FinalDbDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>FinalDbDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="FinalDbDataSet.xss">
+      <DependentUpon>FinalDbDataSet.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -178,6 +370,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="testing_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -194,6 +387,27 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\computer-1331579_640.png" />
+    <None Include="Resources\354637.png" />
+    <None Include="Resources\234648.png" />
+    <Content Include="chart_finance_economy_project_management_business_icon_263048.ico" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dashboard Top Interface\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

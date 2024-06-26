@@ -14,14 +14,17 @@ namespace testing
 {
     public partial class userAccountSystem : UserControl
     {
-        SqlConnection connectionString = new SqlConnection(@"Data Source = DESKTOP-SLBI6LR\SQLEXPRESS;Initial Catalog = FinalDb;Integrated Security=True");
+        SqlConnection connectionString = new SqlConnection(@"Data Source = DESKTOP-SLBI6LR\MSSQLSERVER2024;Initial Catalog = FinalDb;Integrated Security=True");
 
         public userAccountSystem()
         {
             InitializeComponent();
+           
+        }
+        private void userAccountSystem_Load(object sender, EventArgs e)
+        {
             displayUsersData();
         }
-
 
         public void RefreshData()
         {
@@ -44,12 +47,12 @@ namespace testing
         private void btnRegister_Click(object sender, EventArgs e)
         {
             if (txtUserid.Text == ""
-            || txtUsername.Text == ""
-            || txtPassword.Text == ""
-            || txtFirstname.Text == ""
-            || txtLastname.Text == ""
-            || cmbPrivilege.Text == ""
-            )
+           || txtUsername.Text == ""
+           || txtPassword.Text == ""
+           || txtFirstname.Text == ""
+           || txtLastname.Text == ""
+           || cmbPrivilege.Text == ""
+           || AddUserPicture.Image == null)
             {
                 MessageBox.Show("Please fill all blank fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -90,6 +93,35 @@ namespace testing
                             cmd.Parameters.AddWithValue("@Lastname", txtLastname.Text.Trim());
                             cmd.Parameters.AddWithValue("@Privilege", cmbPrivilege.Text.Trim());
 
+                            if (AddUserPicture.Image != null)
+                            {
+                                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                string parentFolderName = "Student Information"; // Name of the parent folder
+                                string childFolderName = "Instructor Image"; // Name of the child folder
+                                string parentFolderPath = Path.Combine(documentsPath, parentFolderName);
+                                string childFolderPath = Path.Combine(parentFolderPath, childFolderName);
+                                string imagePath = Path.Combine(childFolderPath, txtUserid.Text.Trim() + ".jpg");
+
+                                // Create the parent folder if it doesn't exist
+                                if (!Directory.Exists(parentFolderPath))
+                                    Directory.CreateDirectory(parentFolderPath);
+
+                                // Create the child folder if it doesn't exist
+                                if (!Directory.Exists(childFolderPath))
+                                    Directory.CreateDirectory(childFolderPath);
+
+                                // Copy the image to the child folder
+                                File.Copy(AddUserPicture.ImageLocation, imagePath, true);
+
+                                // Assuming the image column in your table is a varbinary(max) type
+                                cmd.Parameters.AddWithValue("@Photo", File.ReadAllBytes(imagePath));
+                            }
+                            else
+                            {
+                                // Set photo to null if no image selected
+                                cmd.Parameters.AddWithValue("@Photo", DBNull.Value);
+                            }
+
                             cmd.ExecuteNonQuery();
                             RefreshData();
 
@@ -119,7 +151,7 @@ namespace testing
            || txtFirstname.Text == ""
            || txtLastname.Text == ""
            || cmbPrivilege.Text == ""
-             )
+           || AddUserPicture.Image == null)
             {
                 MessageBox.Show("Please fill all blank fields", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -165,6 +197,35 @@ namespace testing
                             cmd.Parameters.AddWithValue("@Firstname", txtFirstname.Text.Trim());
                             cmd.Parameters.AddWithValue("@Lastname", txtLastname.Text.Trim());
                             cmd.Parameters.AddWithValue("@Privilege", cmbPrivilege.Text.Trim());
+
+                            if (AddUserPicture.Image != null)
+                            {
+                                string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                string parentFolderName = "Student Information"; // Name of the parent folder
+                                string childFolderName = "Instructor Image"; // Name of the child folder
+                                string parentFolderPath = Path.Combine(documentsPath, parentFolderName);
+                                string childFolderPath = Path.Combine(parentFolderPath, childFolderName);
+                                string imagePath = Path.Combine(childFolderPath, txtUserid.Text.Trim() + ".jpg");
+
+                                // Create the parent folder if it doesn't exist
+                                if (!Directory.Exists(parentFolderPath))
+                                    Directory.CreateDirectory(parentFolderPath);
+
+                                // Create the child folder if it doesn't exist
+                                if (!Directory.Exists(childFolderPath))
+                                    Directory.CreateDirectory(childFolderPath);
+
+                                // Copy the image to the child folder
+                                File.Copy(AddUserPicture.ImageLocation, imagePath, true);
+
+                                // Assuming the image column in your table is a varbinary(max) type
+                                cmd.Parameters.AddWithValue("@Photo", File.ReadAllBytes(imagePath));
+                            }
+                            else
+                            {
+                                // Set photo to null if no image selected
+                                cmd.Parameters.AddWithValue("@Photo", DBNull.Value);
+                            }
 
                             cmd.ExecuteNonQuery();
                             RefreshData();
@@ -247,23 +308,41 @@ namespace testing
                 // Get the selected row
                 DataGridViewRow row = dataGridView1.SelectedRows[0];  // Assuming single selection
 
-                string UserId = row.Cells[0].Value.ToString();
                 string Username = row.Cells[1].Value.ToString();
                 string Password = row.Cells[2].Value.ToString();  // Adjust index
                 string Firstname = row.Cells[3].Value.ToString();  // Adjust index
                 string Lastname = row.Cells[4].Value.ToString();  // Adjust index
                 string Privilege = row.Cells[5].Value.ToString();  // Adjust index
 
-                txtUserid.Text = UserId;
+                int UserId;
+
                 txtUsername.Text = Username;
                 txtPassword.Text = Password;
                 txtFirstname.Text = Firstname;
                 txtLastname.Text = Lastname;
                 cmbPrivilege.SelectedIndex = cmbPrivilege.FindStringExact(Privilege);
-            }
-            else
-            {
-                MessageBox.Show("Invalid ID Number format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Assuming ID number is an integer
+                if (int.TryParse(row.Cells[0]?.Value?.ToString(), out UserId))
+                {
+                    txtUserid.Text = UserId.ToString();
+                    byte[] photoData = GetInstructorPhoto(UserId);
+                    if (photoData != null)
+                    {
+                        using (MemoryStream ms = new MemoryStream(photoData))
+                        {
+                            AddUserPicture.Image = Image.FromStream(ms);
+                        }
+                    }
+                    else
+                    {
+                        AddUserPicture.Image = Properties.Resources.NoImagePlaceholder; // Use placeholder image resource
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid ID number format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -412,5 +491,68 @@ namespace testing
                 connectionString.Close();
             }
         }
+        private void btnBrowseImg_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Filter = "Image Files (*.jpg; *.png)|*.jpg;*.png";
+                string imagePath = "";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    imagePath = dialog.FileName;
+                    AddUserPicture.ImageLocation = imagePath;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex
+                    , "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private byte[] GetInstructorPhoto(int UserId)
+        {
+            try
+            {
+                // Create a new connection instance using the latest connection string
+                
+                // Open the connection
+                connectionString.Open();
+
+                // Create the command
+                using (SqlCommand command = new SqlCommand("SELECT Photo FROM Users WHERE UserId = @UserId", connectionString))
+                {
+                    // Add parameter
+                    command.Parameters.AddWithValue("@UserId", UserId);
+
+                    // Execute the query
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if (reader["Photo"] != DBNull.Value)
+                            {
+                                byte[] photo = (byte[])reader["Photo"];
+                                return photo;
+                            }
+                        }
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error occurred while retrieving image: " + ex.Message);
+            }
+            finally
+            {
+                connectionString.Close();
+            }
+            // If an error occurs or no photo is found, return null
+            return null;
+        }
+
+
+
     }
  }

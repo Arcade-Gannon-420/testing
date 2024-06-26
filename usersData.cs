@@ -21,7 +21,7 @@ namespace testing
         {
             List<usersData> listdata = new List<usersData>();
 
-            string connectionString = @"Data Source = DESKTOP-SLBI6LR\SQLEXPRESS;Initial Catalog = FinalDb;Integrated Security=True";
+            string connectionString = @"Data Source = DESKTOP-SLBI6LR\MSSQLSERVER2024;Initial Catalog = FinalDb;Integrated Security=True";
 
             try
             {

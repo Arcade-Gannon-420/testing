@@ -18,22 +18,22 @@ namespace testing.Subject_Creation_System
 {
     public partial class subjectCreationSystem : UserControl
     {
-        SqlConnection connectionString = new SqlConnection(@"Data Source = DESKTOP-SLBI6LR\SQLEXPRESS;Initial Catalog = FinalDb;Integrated Security=True");
-
+        SqlConnection connectionString = new SqlConnection(@"Data Source = DESKTOP-SLBI6LR\MSSQLSERVER2024;Initial Catalog = FinalDb;Integrated Security=True");
+        
         public subjectCreationSystem()
         {
             InitializeComponent();
-            displaySubjectData();
 
             subStartTime.Format = DateTimePickerFormat.Time;
             subEndTime.Format = DateTimePickerFormat.Time;
-
-            // Remove the calendar button
-            subStartTime.ShowUpDown = true;
-            subEndTime.ShowUpDown = true;
-
         }
-        
+
+        //Realtime load
+        private void subjectCreationSystem_Load(object sender, EventArgs e)
+        {
+            displaySubjectData();
+        }
+
         public void RefreshData()
         {
             if (dataGridView1.InvokeRequired)
@@ -43,6 +43,7 @@ namespace testing.Subject_Creation_System
             }
             displaySubjectData();
         }
+
         public void displaySubjectData()
         {
             subjectData sd = new subjectData();
@@ -50,6 +51,7 @@ namespace testing.Subject_Creation_System
 
             dataGridView1.DataSource = listData;
         }
+       
 
 
         private void btnCreate_Click(object sender, EventArgs e)
@@ -109,7 +111,7 @@ namespace testing.Subject_Creation_System
                             if (chkWednesday.Checked)
                                 selectedDays += "W";
                             if (chkThursday.Checked)
-                                selectedDays += "TH";
+                                selectedDays += "Th";
                             if (chkFriday.Checked)
                                 selectedDays += "F";
                             if (chkSaturday.Checked)
@@ -123,6 +125,7 @@ namespace testing.Subject_Creation_System
                             cmd.Parameters.AddWithValue("@StartTime", subStartTime.Value.ToString("hh:mm:ss tt"));
                             cmd.Parameters.AddWithValue("@EndTime", subEndTime.Value.ToString("hh:mm:ss tt"));
                             cmd.Parameters.AddWithValue("@Course", cmbCourse.Text.Trim());
+
 
                             cmd.ExecuteNonQuery();
                             RefreshData();
@@ -205,20 +208,21 @@ namespace testing.Subject_Creation_System
                             if (chkWednesday.Checked)
                                 selectedDays += "W";
                             if (chkThursday.Checked)
-                                selectedDays += "TH";
+                                selectedDays += "Th";
                             if (chkFriday.Checked)
                                 selectedDays += "F";
                             if (chkSaturday.Checked)
                                 selectedDays += "S";
+
+
                             cmd.Parameters.AddWithValue("@Schedule", selectedDays);
-
-
                             cmd.Parameters.AddWithValue("@StartTime", subStartTime.Value.ToString("hh:mm:ss tt"));
                             cmd.Parameters.AddWithValue("@EndTime", subEndTime.Value.ToString("hh:mm:ss tt"));
                             cmd.Parameters.AddWithValue("@Course", cmbCourse.Text.Trim());
 
                             cmd.ExecuteNonQuery();
                             RefreshData();
+
                             MessageBox.Show("Subject updated successfully!", "Information Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             clearFields();
                         }
@@ -271,9 +275,9 @@ namespace testing.Subject_Creation_System
                     MessageBox.Show("Subject deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     clearFields();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error: You must disenroll the students from this subject first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -333,7 +337,7 @@ namespace testing.Subject_Creation_System
                 chkMonday.Checked = Schedule.Contains("M");
                 chkTuesday.Checked = Schedule.Contains("T");
                 chkWednesday.Checked = Schedule.Contains("W");
-                chkThursday.Checked = Schedule.Contains("TH");
+                chkThursday.Checked = Schedule.Contains("Th");
                 chkFriday.Checked = Schedule.Contains("F");
                 chkSaturday.Checked = Schedule.Contains("S");
 
@@ -351,78 +355,6 @@ namespace testing.Subject_Creation_System
             else
             {
                 MessageBox.Show("Invalid EDP Code format.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnSubSearch_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Clear any existing data in the DataGridView
-
-                dataGridView1.DataSource = null;
-
-                if (txtSubSearch.Text.Trim() == "") // Check if search field is empty
-                {
-                    string defaultQuery = "SELECT * FROM Subjects";  // Replace with your default student selection logic
-
-                    connectionString.Open();
-                    using (SqlCommand cmd = new SqlCommand(defaultQuery, connectionString))
-                    {
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-                            dataGridView1.DataSource = dt;
-                        }
-                    }
-                    return;
-                }
-                
-                // Use parameterized query to prevent SQL injection vulnerabilities
-                string sql = "SearchSubjects";
-                using (SqlCommand cmd = new SqlCommand(sql, connectionString))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@searchValue", txtSubSearch.Text.Trim());
-
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-
-                        if (dt.Rows.Count == 0)
-                        {
-                            MessageBox.Show("No Subject found matching your search criteria.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            // Display the default student list after showing the message
-                            string defaultQuery = "SELECT * FROM Subjects"; // Replace with your default student selection logic
-                            using (SqlCommand cmd2 = new SqlCommand(defaultQuery, connectionString)) // Create a new command for the default query
-                            {
-                                using (SqlDataAdapter adapter2 = new SqlDataAdapter(cmd2))
-                                {
-                                    DataTable dt2 = new DataTable();
-                                    adapter2.Fill(dt2);
-                                    dataGridView1.DataSource = dt2;
-                                }
-                            }
-                            txtSubSearch.Clear();
-                        }
-                        else
-                        {
-                            dataGridView1.DataSource = dt; // Set the DataGridView data source if results exist
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message, "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                connectionString.Close();
             }
         }
 
@@ -498,9 +430,5 @@ namespace testing.Subject_Creation_System
             }
         }
 
-        private void subTimeOut_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
