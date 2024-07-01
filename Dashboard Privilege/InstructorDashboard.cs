@@ -123,16 +123,25 @@ namespace testing.Dashboard_Privilege.Instructor_Dashboard
                 connectionString.Open();
 
                 string query = @"
-                    SELECT 
-                        SUM(CASE WHEN a.enrollmentStatus = 'Present' THEN 1 ELSE 0 END) AS PresentCount,
-                        SUM(CASE WHEN a.enrollmentStatus = 'Late' THEN 1 ELSE 0 END) AS LateCount,
-                        SUM(CASE WHEN a.enrollmentStatus = 'Absent' THEN 1 ELSE 0 END) AS AbsentCount
-                    FROM 
-                        Attendance a
-                    INNER JOIN 
-                        Subjects s ON a.EDPCode = s.EDPCode
-                    WHERE 
-                        s.Title = @SubjectTitle";
+            SELECT 
+                SUM(CASE WHEN a.enrollmentStatus = 'Present' THEN 1 ELSE 0 END) AS PresentCount,
+                SUM(CASE WHEN a.enrollmentStatus = 'Late' THEN 1 ELSE 0 END) AS LateCount,
+                SUM(CASE WHEN a.enrollmentStatus = 'Absent' THEN 1 ELSE 0 END) AS AbsentCount
+            FROM 
+                Attendance a
+            WHERE 
+                a.Title = @SubjectTitle
+                AND CHARINDEX(
+                    CASE DATENAME(WEEKDAY, GETDATE())
+                        WHEN 'Monday' THEN 'M'
+                        WHEN 'Tuesday' THEN 'T'
+                        WHEN 'Wednesday' THEN 'W'
+                        WHEN 'Thursday' THEN 'Th'
+                        WHEN 'Friday' THEN 'F'
+                        WHEN 'Saturday' THEN 'S'
+                    END, 
+                    a.Schedule) > 0
+                AND a.Date = CAST(GETDATE() AS DATE)";
 
                 SqlCommand command = new SqlCommand(query, connectionString);
                 command.Parameters.AddWithValue("@SubjectTitle", subjectTitle);
@@ -222,8 +231,7 @@ namespace testing.Dashboard_Privilege.Instructor_Dashboard
 
                 UpdateSubjectNameLabel();
             }
-
-
         }
+
     }
 }

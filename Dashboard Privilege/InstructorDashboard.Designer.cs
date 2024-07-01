@@ -553,7 +553,7 @@
             // panel11
             // 
             this.panel11.BackColor = System.Drawing.Color.Red;
-            this.panel11.Location = new System.Drawing.Point(749, 547);
+            this.panel11.Location = new System.Drawing.Point(600, 461);
             this.panel11.Margin = new System.Windows.Forms.Padding(0);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(50, 50);

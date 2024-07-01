@@ -21,9 +21,7 @@ namespace testing
     {
         SqlConnection connectionString = new SqlConnection(@"Data Source =.\MSSQLSERVER2024;Initial Catalog = FinalDb;Integrated Security=True");
 
-
-        private laboratorySupervisorLogin laboratorySupervisorLogin;
-        
+                
         public Form1()
         {
             InitializeComponent();
@@ -31,9 +29,7 @@ namespace testing
             panel2.MouseDown += Panel2_MouseDown;
             panel2.MouseMove += Panel2_MouseMove;
             panel2.MouseUp += Panel2_MouseUp;
-             
-            // Set the PasswordChar property to mask the password input
-            txtPassword.PasswordChar = '*';
+           
         }
 
         private bool dragging = false;
@@ -149,6 +145,7 @@ namespace testing
         private void Form1_Load(object sender, EventArgs e)
         {
             panel6.BackColor = Color.FromArgb(95,72,183,255);
+            txtPassword.PasswordChar = '*';
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -156,18 +153,22 @@ namespace testing
             login();
         }
 
-        private void btnLabSup_Click_1(object sender, EventArgs e)
+        private void buttonCheck()
         {
-            if (laboratorySupervisorLogin == null || laboratorySupervisorLogin.IsDisposed)
+            if (rbShowPassword.Checked)
             {
-                laboratorySupervisorLogin = new laboratorySupervisorLogin();
-                laboratorySupervisorLogin.Dock = DockStyle.Fill;
-                panel1.Controls.Add(laboratorySupervisorLogin);
+                // If the radio button is checked, do not mask the password
+                txtPassword.PasswordChar = '\0';
             }
-            else
+            else 
             {
-                laboratorySupervisorLogin.BringToFront();
+                txtPassword.PasswordChar = '*';
             }
+        }
+
+        private void rbShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            buttonCheck();
         }
     }
 }
