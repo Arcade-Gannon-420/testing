@@ -169,7 +169,7 @@ namespace testing
 
                 InstructorDisplay = new InstructorDisplay();
                 InstructorDisplay.Dock = DockStyle.Fill;
-                panel4.Controls.Add(InstructorDisplay);
+                label3.Text = "Instructor";
 
                 /*
                  instructor buttons that needs to be active
@@ -234,7 +234,7 @@ namespace testing
 
                 WorkingStudentDisplay = new WorkingStudentDisplay();
                 WorkingStudentDisplay.Dock = DockStyle.Fill;
-                panel4.Controls.Add(WorkingStudentDisplay);
+                label3.Text = "Working Student";
 
                 //Button Visibility
                 //Dashboard
@@ -288,7 +288,7 @@ namespace testing
 
                 LabSupervisorDisplay = new LabSupervisorDisplay();
                 LabSupervisorDisplay.Dock = DockStyle.Fill;
-                panel4.Controls.Add(LabSupervisorDisplay);
+                label3.Text = "Laboratory Supervisor";
 
                 //Instructor Class List
                 panel7.Visible=false;
@@ -584,5 +584,7 @@ namespace testing
                 Form1.BringToFront();
             }
         }
+
+       
     }
 }

@@ -147,6 +147,7 @@
             this.txtEndTime.Name = "txtEndTime";
             this.txtEndTime.Size = new System.Drawing.Size(236, 20);
             this.txtEndTime.TabIndex = 150;
+            this.txtEndTime.Visible = false;
             // 
             // txtStartTime
             // 
@@ -155,6 +156,7 @@
             this.txtStartTime.Name = "txtStartTime";
             this.txtStartTime.Size = new System.Drawing.Size(236, 20);
             this.txtStartTime.TabIndex = 149;
+            this.txtStartTime.Visible = false;
             // 
             // txtSchedule
             // 
@@ -163,6 +165,7 @@
             this.txtSchedule.Name = "txtSchedule";
             this.txtSchedule.Size = new System.Drawing.Size(236, 20);
             this.txtSchedule.TabIndex = 148;
+            this.txtSchedule.Visible = false;
             // 
             // txtSubjectCode
             // 
@@ -171,6 +174,7 @@
             this.txtSubjectCode.Name = "txtSubjectCode";
             this.txtSubjectCode.Size = new System.Drawing.Size(236, 20);
             this.txtSubjectCode.TabIndex = 147;
+            this.txtSubjectCode.Visible = false;
             // 
             // txtTitle
             // 
@@ -179,6 +183,7 @@
             this.txtTitle.Name = "txtTitle";
             this.txtTitle.Size = new System.Drawing.Size(236, 20);
             this.txtTitle.TabIndex = 146;
+            this.txtTitle.Visible = false;
             // 
             // label4
             // 
